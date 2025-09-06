@@ -55,7 +55,8 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     "nuxt-security",
     '@storefront-ui/nuxt',
-    'vuetify-nuxt-module'
+    'vuetify-nuxt-module',
+    '@nuxtjs/leaflet',
   ],
 
   security: {

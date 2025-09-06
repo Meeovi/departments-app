@@ -1,7 +1,5 @@
 <template>
-  <v-responsive>
-    <slot />
-  </v-responsive>
+    <div></div>
 </template>
 
 <script setup>

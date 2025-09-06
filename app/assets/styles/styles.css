@@ -1034,7 +1034,7 @@ body {
 }
 
 #dateTime {
-    color: rgb(var(--v-theme-info));
+    color: white;
 }
 
 .userProfileAvatar {
