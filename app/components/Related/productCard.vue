@@ -3,7 +3,7 @@
     <div>
       <div class="relative">
         <SfLink :href="`/product/${product.id}`" class="block">
-          <NuxtImg :src="`${$directus?.url}assets/${product.image?.filename_disk}`" :alt="product?.name"
+          <NuxtImg :src="`${$directus?.url}/assets/${product.image?.filename_disk}`" :alt="product?.name"
             class="block object-cover h-auto rounded-md aspect-square" width="300" height="300" />
         </SfLink>
         <SfButton variant="tertiary" size="sm" square

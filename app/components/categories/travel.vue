@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="map" style="height: 350px;"></div>
+        <div id="map" style="height: 400px;"></div>
         <p v-if="locationError">{{ locationError }}</p>
     </div>
 </template>

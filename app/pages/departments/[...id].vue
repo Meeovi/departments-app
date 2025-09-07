@@ -162,13 +162,22 @@
                         </v-slide-group>
                     </v-sheet>
 
-                    <!--List of products in the department-->
-                    <div
-                        class="mx-auto sliderProducts row align-items-stretch items-row justify-content-left categoryGridProducts">
-                        <v-col cols="3" v-for="products in department?.products" :key="products.id">
-                            <productCard :product="products?.products_id" />
-                        </v-col>
-                    </div>
+                    <!--List of latest products in the department-->
+                    <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center">
+                        <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
+                            <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }"
+                                v-for="products in department?.products" :key="products">
+                                <productCard :product="products?.products_id" :class="['ma-4', selectedClass]"
+                                    @click="toggle" />
+                                <div class="d-flex fill-height align-center justify-center">
+                                    <v-scale-transition>
+                                        <v-icon v-if="isSelected" color="white" icon="mdi-close-circle-outline"
+                                            size="48"></v-icon>
+                                    </v-scale-transition>
+                                </div>
+                            </v-slide-group-item>
+                        </v-slide-group>
+                    </v-sheet>
 
                     <!--List of events in this department-->
                     <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center"
@@ -177,7 +186,7 @@
                             {{ department?.name }}</h4>
                         <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
                             <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }"
-                                v-for="products in department?.events" :key="products">
+                                v-for="products in events" :key="products">
                                 <productCard :product="products?.events_id" :class="['ma-4', selectedClass]"
                                     @click="toggle" />
                                 <div class="d-flex fill-height align-center justify-center">
@@ -192,8 +201,7 @@
                     <!---->
 
                     <!--List of spaces in the department-->
-                    <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center"
-                        v-if="department?.products?.products_id?.type === 'department'">
+                    <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center">
                         <h4 style="left: 15px; position: relative;">{{ callouts?.menus?.[4]?.name }}
                             {{ department?.name }}</h4>
                         <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
@@ -255,6 +263,7 @@
             fields: ['*',
                 'products.products_id.*',
                 'collections.collections_id.*',
+                'images.*'
             ],
             limit: 2,
         }))
@@ -267,6 +276,7 @@
             fields: ['*',
                 'products.products_id.*',
                 'collections.collections_id.*',
+                'images.*'
             ],
             limit: 10,
             filter: {
@@ -285,9 +295,11 @@
         data: latest
     } = await useAsyncData('latest', () => {
         return $directus.request($readItem('departments', route.params.id, {
-            fields: ['*', {
-                'products': ['products_id']
-            }],
+            fields: ['*',
+                'products.products_id.*',
+                'collections.collections_id.*',
+                'images.*'
+            ],
             limit: 10,
             filter: {
                 products: {
@@ -303,17 +315,41 @@
 
     const {
         data: limitProducts
-    } = await useAsyncData('limitProducts', () => {
+    } = await useAsyncData('latest', () => {
         return $directus.request($readItem('departments', route.params.id, {
-            fields: ['*', {
-                'products': ['products_id']
-            }],
+            fields: ['*',
+                'products.products_id.*',
+                'collections.collections_id.*',
+                'images.*'
+            ],
             limit: 2,
             filter: {
                 products: {
                     products_id: {
                         status: {
                             _eq: "published"
+                        }
+                    }
+                }
+            }
+        }))
+    })
+
+        const {
+        data: events
+    } = await useAsyncData('events', () => {
+        return $directus.request($readItem('departments', route.params.id, {
+            fields: ['*',
+                'products.products_id.*',
+                'collections.collections_id.*',
+                'images.*'
+            ],
+            limit: 10,
+            filter: {
+                products: {
+                    products_id: {
+                        type: {
+                            _eq: "event"
                         }
                     }
                 }
