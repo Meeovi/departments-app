@@ -34,7 +34,7 @@
                             </v-menu>
                         </v-slide-group-item>
 
-                        <v-slide-group-item v-for="menu in department?.menus" :key="menu"
+                        <v-slide-group-item v-if="department?.menus?.length" v-for="menu in department?.menus" :key="menu"
                             v-slot="{ isSelected, toggle }">
                             <v-btn :color="isSelected ? 'primary' : undefined" class="ma-2" @click="toggle"
                                 :href="`${menu?.url}`">
@@ -149,7 +149,7 @@
                         <h4 style="left: 15px; position: relative;">{{ callouts?.menus?.[2]?.name }}</h4>
                         <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
                             <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }"
-                                v-for="products in latest?.products" :key="products">
+                                v-for="products in latestProducts?.products" :key="products">
                                 <productCard :product="products?.products_id" :class="['ma-4', selectedClass]"
                                     @click="toggle" />
                                 <div class="d-flex fill-height align-center justify-center">
@@ -162,7 +162,7 @@
                         </v-slide-group>
                     </v-sheet>
 
-                    <!--List of latest products in the department-->
+                    <!--List of products in the department-->
                     <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center">
                         <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
                             <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }"
@@ -201,7 +201,7 @@
                     <!---->
 
                     <!--List of spaces in the department-->
-                    <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center">
+                    <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center" v-if="department?.spaces?.length">
                         <h4 style="left: 15px; position: relative;">{{ callouts?.menus?.[4]?.name }}
                             {{ department?.name }}</h4>
                         <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
@@ -292,8 +292,8 @@
     })
 
     const {
-        data: latest
-    } = await useAsyncData('latest', () => {
+        data: latestProducts
+    } = await useAsyncData('latestProducts', () => {
         return $directus.request($readItem('departments', route.params.id, {
             fields: ['*',
                 'products.products_id.*',
@@ -315,7 +315,7 @@
 
     const {
         data: limitProducts
-    } = await useAsyncData('latest', () => {
+    } = await useAsyncData('limitProducts', () => {
         return $directus.request($readItem('departments', route.params.id, {
             fields: ['*',
                 'products.products_id.*',

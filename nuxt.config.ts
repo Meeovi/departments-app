@@ -5,10 +5,6 @@ export default defineNuxtConfig({
     enabled: false
   },
 
-  features: {
-    devLogs: false,
-  },
-
   app: {
     head: {
       viewport: 'minimum-scale=1, initial-scale=1, width=device-width',
@@ -50,50 +46,11 @@ export default defineNuxtConfig({
   ],
 
   modules: [
-    '@nuxtjs/seo',
     '@nuxt/image',
-    '@nuxtjs/i18n',
-    "nuxt-security",
     '@storefront-ui/nuxt',
     'vuetify-nuxt-module',
     '@nuxtjs/leaflet',
   ],
-
-  security: {
-    headers: {
-      contentSecurityPolicy: {
-        'img-src': ["'self'", 'data:', '*'],
-        'script-src': ["'self'", "'unsafe-inline'", '*'],
-        'script-src-attr': ["'unsafe-inline'"],
-        'connect-src': ["'self'", process.env.DIRECTUS_URL || ''],
-        'frame-ancestors': ["'self'", process.env.DIRECTUS_URL || ''],
-      },
-      strictTransportSecurity: {
-        maxAge: 0
-      },
-      crossOriginOpenerPolicy: false,
-      crossOriginEmbedderPolicy: false,
-      permissionsPolicy: false
-    }
-  },
-
-  i18n: {
-    strategy: "prefix_except_default",
-    defaultLocale: "en",
-    detectBrowserLanguage: false,
-    vueI18n: './app/i18n/i18n.config',
-    locales: [{
-      code: 'en',
-      name: 'English',
-    }, {
-      code: 'es',
-      name: 'Español',
-    }, {
-      code: 'ar',
-      name: 'العربية',
-      dir: 'rtl',
-    }],
-  },
 
   vuetify: {
     vuetifyOptions: {
@@ -114,35 +71,8 @@ export default defineNuxtConfig({
     }
   },
 
-  // Image Configuration - https://image.nuxt.com/providers/directus
-  image: {
-    providers: {
-      directus: {
-        provider: 'directus',
-        options: {
-          baseURL: `${process.env.DIRECTUS_URL}assets/`,
-        },
-      },
-    },
-  },
-
-  site: {
-    url: process.env.NUXT_PUBLIC_SITE_URL as string,
-  },
-
-  sitemap: {
-    sources: ['/api/sitemap'],
-  },
-
   runtimeConfig: {
-    meilisearch: {
-      apiKey: process.env.MEILISEARCH_MASTER_KEY
-    },
     public: {
-      // Site Configuration
-      siteName: process.env.NUXT_PUBLIC_SITE_NAME || 'Meeovi',
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
-
       // Directus
       directus: {
         url: process.env.DIRECTUS_URL,
@@ -163,25 +93,9 @@ export default defineNuxtConfig({
           },
         }
       },
-
-      meilisearch: {
-        host: process.env.NUXT_PUBLIC_MEILISEARCH_HOST || 'http://localhost:7700',
-        searchApiKey: process.env.NUXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY || '',
-        indexName: process.env.NUXT_PUBLIC_MEILISEARCH_INDEX_NAME || 'default',
-        options: {
-          primaryKey: 'id',
-          keepZeroFacets: false,
-          finitePagination: false
-        }
-      },
-
-      // Google Tag Manager
-      gtagId: process.env.NUXT_PUBLIC_GTAG_ID,
     },
   },
 
   // Build configuration
-  build: {
-    transpile: ['@meilisearch/instant-meilisearch', 'vue-instantsearch']
-  },
+  build: {},
 })
