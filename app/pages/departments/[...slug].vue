@@ -1,5 +1,5 @@
 <template>
-    <div class="departmentPage">
+    <div>
         <div v-if="department?.name === 'Deals'">
             <v-toolbar :style="`background-color: ${department?.color}; color: ${department?.colortext}`"
                 :title="department?.name"></v-toolbar>
@@ -22,11 +22,11 @@
                                 <v-list class="departmentMenu">
                                     <v-row>
                                         <v-col cols="3" v-for="categories in department?.categories"
-                                            :key="categories?.categories_id?.id">
+                                            :key="categories?.id">
                                             <v-list-item>
-                                                <NuxtLink
-                                                    :to="`/departments/category/${categories?.categories_id?.id}`">
-                                                    {{ categories?.categories_id?.name }}</NuxtLink>
+                                                <v-chip
+                                                    :link="`/departments/category/${categories?.categories_id?.slug}`">
+                                                    {{ categories?.categories_id?.name }}</v-chip>
                                             </v-list-item>
                                         </v-col>
                                     </v-row>
@@ -34,8 +34,8 @@
                             </v-menu>
                         </v-slide-group-item>
 
-                        <v-slide-group-item v-if="department?.menus?.length" v-for="menu in department?.menus" :key="menu"
-                            v-slot="{ isSelected, toggle }">
+                        <v-slide-group-item v-if="department?.menus?.length" v-for="menu in department?.menus"
+                            :key="menu" v-slot="{ isSelected, toggle }">
                             <v-btn :color="isSelected ? 'primary' : undefined" class="ma-2" @click="toggle"
                                 :href="`${menu?.url}`">
                                 {{ menu?.name }}
@@ -44,60 +44,67 @@
                     </v-slide-group>
                 </v-toolbar>
 
-                <section data-bs-version="5.1" class="pricing6 shopm5 cid-uW1BAp128W" id="apricing6-1">
+                <!--Department Top Banner Section-->
+                <section data-bs-version="5.1" class="pricing6 shopm5 cid-tZY31Y2JxZ" id="apricing6-6g">
 
                     <div class="mbr-overlay"></div>
-                    <div class="container">
-                        <div>
-                            <div class="row align-items-stretch items-row justify-content-center">
+                    <div class="container-fluid">
+                        <div class="row align-items-stretch items-row justify-content-center">
 
-                                <div class="col-12 col-md-12 col-lg-6">
-                                    <div v-if="department?.name === 'Travel'">
-                                        <travel :category="department?.name" />
-                                    </div>
-                                    <!--<div v-else-if="department?.name === 'Appstore'">
+                            <div class="col-lg-6">
+                                <div v-if="department?.name === 'Travel'">
+                                    <travel :category="department?.name" />
+                                </div>
+                                <!--<div v-else-if="department?.name === 'Appstore'">
             <appstore :category="department?.name" />
           </div>-->
-                                    <div v-else-if="department?.name === 'Weather'">
-                                        <weather :category="department?.name" />
-                                    </div>
-
-                                    <div v-else-if="department?.name === 'Time'">
-                                        <timeComponent :category="department?.name" />
-                                    </div>
-
-                                    <div v-else class="mbr-section-head"
-                                        :style="`background-color: ${department?.color}`">
-                                        <h4 class="mbr-section-title mbr-fonts-style mb-0 display-7" :style="`color: ${department?.colortext}`">
-                                            <strong>Meeovi</strong>
-                                        </h4>
-                                        <h5 class="mbr-section-subtitle mbr-fonts-style mb-0 display-2" :style="`color: ${department?.colortext}`">
-                                            <strong>{{ department?.name }}</strong>
-                                        </h5>
-                                        <h5 class="main-text mbr-fonts-style mb-0 display-7" :style="`color: ${department?.colortext}`">
-                                            {{ department?.description }}
-                                        </h5>
-                                        <div class="mbr-section-btn item-footer">
-                                            <a href="" class="btn btn-danger item-btn display-7" target="_blank">
-                                                <span
-                                                    class="mobi-mbri mobi-mbri-arrow-next mbr-iconfont mbr-iconfont-btn"></span>
-                                                Shop Now
-                                            </a>
-                                        </div>
-                                    </div>
+                                <div v-else-if="department?.name === 'Weather'">
+                                    <weather :category="department?.name" />
                                 </div>
 
-                                <div class="item features-image col-12 col-md-6 col-lg-3"
-                                    v-for="product in introProducts?.products" :key="product.id">
-                                    <productCard :product="product?.products_id" />
+                                <div v-else-if="department?.name === 'Time'">
+                                    <timeComponent :category="department?.name" />
+                                </div>
+
+                                <div v-else class="mbr-section-head" :style="`background-color: ${department?.color}`">
+                                    <h4 class="mbr-section-title mbr-fonts-style mb-0 display-7"
+                                        :style="`color: ${department?.colortext}`">
+                                        <strong>Meeovi</strong>
+                                    </h4>
+                                    <h5 class="mbr-section-subtitle mbr-fonts-style mb-0 display-2"
+                                        :style="`color: ${department?.colortext}`">
+                                        <strong>{{ department?.name }}</strong>
+                                    </h5>
+                                    <h5 class="main-text mbr-fonts-style mb-0 display-7"
+                                        :style="`color: ${department?.colortext}`">
+                                        {{ department?.description }}
+                                    </h5>
                                 </div>
                             </div>
+
+                            <v-sheet
+                                class="mx-auto col-lg-6" style="background-color: transparent; box-shadow: none;">
+                                <h4 style="left: 15px; position: relative;">{{ callouts?.menus?.[1]?.name }}</h4>
+                                <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
+                                    <v-slide-group-item v-slot="{ isSelected, toggle, selectedClass }"
+                                        v-for="products in department?.products" :key="products">
+                                        <productCard :product="products?.products_id" :class="['ma-4', selectedClass]"
+                                            @click="toggle" />
+                                        <div class="d-flex fill-height align-center justify-center">
+                                            <v-scale-transition>
+                                                <v-icon v-if="isSelected" color="white" icon="mdi-close-circle-outline"
+                                                    size="48"></v-icon>
+                                            </v-scale-transition>
+                                        </div>
+                                    </v-slide-group-item>
+                                </v-slide-group>
+                            </v-sheet>
                         </div>
                     </div>
                 </section>
 
-                <section data-bs-version="5.1" class="gallery2 shopm5 cid-uW1BojE78S" id="agallery2-0"
-                    v-if="department?.products?.products_id?.type === 'department'"
+                <!--Department Content Section-->
+                <section data-bs-version="5.1" class="gallery2 shopm5 cid-uW1BojE78S" id="agallery2-0" v-if="department?.shorts?.length && department?.products?.products_id?.type === 'department'"
                     :style="`background-image: url(${$directus?.url}assets/${department?.image?.filename_disk})`">
                     <div class="mbr-overlay" style="opacity: 0.8; background-color: rgb(255, 255, 255);">
                     </div>
@@ -181,7 +188,7 @@
 
                     <!--List of events in this department-->
                     <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center"
-                        v-if="department?.products?.products_id?.type === 'department'">
+                        v-if="department?.products?.products_id?.type === 'department' && events?.length">
                         <h4 style="left: 15px; position: relative;">{{ callouts?.menus?.[3]?.name }}
                             {{ department?.name }}</h4>
                         <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
@@ -201,7 +208,8 @@
                     <!---->
 
                     <!--List of spaces in the department-->
-                    <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center" v-if="department?.spaces?.length">
+                    <v-sheet class="mx-auto sliderProducts row align-items-stretch items-row justify-content-center"
+                        v-if="department?.spaces?.length">
                         <h4 style="left: 15px; position: relative;">{{ callouts?.menus?.[4]?.name }}
                             {{ department?.name }}</h4>
                         <v-slide-group v-model="model" class="pa-4" selected-class="bg-success" show-arrows>
@@ -224,9 +232,9 @@
 </template>
 
 <script setup>
-    import shorts from '@/components/Related/short.vue'
-    import spaces from '@/components/Related/space.vue'
-    import productCard from '@/components/Related/productCard.vue'
+    import shorts from '#social/app/components/related/short.vue'
+    import spaces from '#social/app/components/related/space.vue'
+    import productCard from '#commerce/app/components/catalog/product/productCard.vue'
     import travel from '@/components/categories/travel.vue'
     import deals from '@/components/categories/deals.vue'
     import timeComponent from '@/components/categories/time/time.vue'
@@ -236,35 +244,47 @@
     const model = ref(null)
     const {
         $directus,
-        $readItem
+        $readItem,
+        $readItems
     } = useNuxtApp()
 
-    const {
-        data: department
-    } = await useAsyncData('department', () => {
-        return $directus.request($readItem('departments', route.params.id, {
-            fields: ['*',
-                'categories.categories_id.*',
-                'spaces.spaces_id.*',
-                'events.events_id.*',
-                'products.products_id.*',
-                'products.products_id.image.*',
-                'menus.*',
-                'shorts.shorts_id.*',
-                'image.*'
-            ]
-        }))
+    const slug = computed(() => {
+        const s = route.params.slug
+        return Array.isArray(s) ? s[0] : s
     })
+
+    const {
+        data: departmentRaw
+    } = await useAsyncData('department', () => {
+        return $directus.request(
+            $readItems('departments', {
+                fields: [
+                    '*',
+                    'categories.categories_id.*',
+                    'spaces.spaces_id.*',
+                    'products.products_id.*',
+                    'products.products_id.image.*',
+                    'shorts.shorts_id.*',
+                    'shops.shops_id.*',
+                    'image.*'
+                ],
+                filter: {
+                    slug: {
+                        _eq: slug.value
+                    }
+                },
+                limit: 1
+            })
+        )
+    })
+
+    const department = computed(() => departmentRaw.value?.[0] || null)
 
     const {
         data: introProducts
     } = await useAsyncData('introProducts', () => {
-        return $directus.request($readItem('departments', route.params.id, {
-            fields: ['*',
-                'products.products_id.*',
-                'collections.collections_id.*',
-                'images.*'
-            ],
+        return $directus.request($readItems('departments', {
+            fields: ['*', { '*': ['*'] }],
             limit: 2,
         }))
     })
@@ -272,21 +292,20 @@
     const {
         data: best
     } = await useAsyncData('best', () => {
-        return $directus.request($readItem('departments', route.params.id, {
+        return $directus.request($readItems('departments', {
             fields: ['*',
                 'products.products_id.*',
-                'collections.collections_id.*',
                 'images.*'
             ],
             limit: 10,
             filter: {
-                collections: {
-                    collections_id: {
+                showcases: {
+                    showcases_id: {
                         name: {
                             _eq: "Best Sellers"
                         }
                     }
-                }
+                },
             }
         }))
     })
@@ -294,10 +313,9 @@
     const {
         data: latestProducts
     } = await useAsyncData('latestProducts', () => {
-        return $directus.request($readItem('departments', route.params.id, {
+        return $directus.request($readItems('departments', {
             fields: ['*',
                 'products.products_id.*',
-                'collections.collections_id.*',
                 'images.*'
             ],
             limit: 10,
@@ -308,7 +326,7 @@
                             _eq: "published"
                         }
                     }
-                }
+                },
             }
         }))
     })
@@ -316,10 +334,9 @@
     const {
         data: limitProducts
     } = await useAsyncData('limitProducts', () => {
-        return $directus.request($readItem('departments', route.params.id, {
+        return $directus.request($readItems('departments', {
             fields: ['*',
                 'products.products_id.*',
-                'collections.collections_id.*',
                 'images.*'
             ],
             limit: 2,
@@ -330,18 +347,17 @@
                             _eq: "published"
                         }
                     }
-                }
+                },
             }
         }))
     })
 
-        const {
+    const {
         data: events
     } = await useAsyncData('events', () => {
-        return $directus.request($readItem('departments', route.params.id, {
+        return $directus.request($readItems('departments', {
             fields: ['*',
                 'products.products_id.*',
-                'collections.collections_id.*',
                 'images.*'
             ],
             limit: 10,
@@ -352,7 +368,7 @@
                             _eq: "event"
                         }
                     }
-                }
+                },
             }
         }))
     })

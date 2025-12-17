@@ -1,5 +1,12 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import { resolve } from 'path'
+
 export default defineNuxtConfig({
+  alias: {
+    '#commerce': resolve(__dirname, '../commerce-app'),
+    '#lists': resolve(__dirname, '../lists-app'),
+    '#social': resolve(__dirname, '../social-app'),
+  },
+
   compatibilityDate: '2025-07-15',
   devtools: {
     enabled: false
@@ -33,7 +40,7 @@ export default defineNuxtConfig({
     },
   },
 
-  css: [
+  /*css: [
     'assets/web/assets/mobirise-icons2/mobirise2.css',
     'assets/bootstrap/css/bootstrap.min.css',
     'assets/bootstrap/css/bootstrap-grid.min.css',
@@ -43,33 +50,11 @@ export default defineNuxtConfig({
     '@fortawesome/fontawesome-svg-core/styles.css',
     'assets/styles/mobile.css',
     'assets/styles/styles.css',
-  ],
+  ],*/
 
   modules: [
-    '@nuxt/image',
-    '@storefront-ui/nuxt',
-    'vuetify-nuxt-module',
     '@nuxtjs/leaflet',
   ],
-
-  vuetify: {
-    vuetifyOptions: {
-      icons: {
-        defaultSet: 'fa-svg',
-        svg: {
-          fa: {
-            libraries: [
-              [ /* default export? */ false, /* export name */ 'fas', /* library */ '@fortawesome/free-solid-svg-icons']
-            ]
-          }
-        },
-        sets: [{
-          name: 'mdi',
-          cdn: 'https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css'
-        }]
-      }
-    }
-  },
 
   runtimeConfig: {
     public: {

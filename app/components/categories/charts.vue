@@ -54,12 +54,12 @@
 </template>
 
 <script setup>
-  import chart from '~/app/components/charts/chart.vue'
-  import createchart from '~/app/components/charts/add-chart.vue'
+  import chart from './chart/chart.vue'
+  import createchart from './chart/add-chart.vue'
   import { ref } from 'vue'
   import {
       useUserStore
-  } from '~/stores/user'
+  } from '#auth/app/stores/user'
   
   const userStore = useUserStore()
 

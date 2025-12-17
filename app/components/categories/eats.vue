@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-    import shorts from '#social/app/components/vibez/shorts.vue'
+    import shorts from '#social/app/components/features/vibeSections/shorts.vue'
     //import share from '~/app/components/partials/globals/share.vue'
 
     const {

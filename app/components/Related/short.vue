@@ -2,7 +2,7 @@
   <v-card class="mb-4" elevation="2">
     <v-card-title class="d-flex align-center">
       <v-avatar size="40" class="mr-3">
-        <v-img :src="short?.creator_avatar || '/default-avatar.png'" :alt="short?.creator" />
+        <v-img :src="short?.creator_avatar || '/images/display-2.png'" :alt="short?.creator" />
       </v-avatar>
       <div>
         <div class="font-weight-bold">{{ short?.creator || 'Anonymous' }}</div>

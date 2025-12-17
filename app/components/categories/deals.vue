@@ -38,7 +38,8 @@
     import {
         ref
     } from 'vue'
-    import productCard from '@/components/Related/productCard.vue'
+    import productCard from '#commerce/app/components/catalog/product/productCard.vue'
+
 
     const {
         $directus,
